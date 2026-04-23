@@ -41,6 +41,79 @@ const WEEKLY_TITLES = [
   "Final Push"
 ];
 
+const QUEST_ARCHETYPES = {
+  move: {
+    icon: "Body",
+    label: "Body Forge",
+    reward: "Strength XP",
+    descriptions: [
+      "Move with intent and leave the day feeling sharper than you started.",
+      "Raise the floor with a session that proves you can act before you feel ready.",
+      "Treat this like identity work, not just exercise."
+    ]
+  },
+  focus: {
+    icon: "Focus",
+    label: "Deep Work Sprint",
+    reward: "Focus XP",
+    descriptions: [
+      "Protect a block of undistracted output and let the world wait.",
+      "Produce something difficult before entertainment gets a vote.",
+      "This is the quest that compounds every other result."
+    ]
+  },
+  learn: {
+    icon: "Mind",
+    label: "Knowledge Raid",
+    reward: "Mind XP",
+    descriptions: [
+      "Feed your mind something that upgrades decisions, not just mood.",
+      "Read or study like you are collecting tools for a stronger self.",
+      "Even a short learning session keeps momentum alive."
+    ]
+  },
+  water: {
+    icon: "Recovery",
+    label: "Hydration Checkpoint",
+    reward: "Recovery XP",
+    descriptions: [
+      "Recovery is a performance tool, not a background detail.",
+      "Hydrate early so the rest of the day works better.",
+      "Make the basics feel automatic and the hard stuff gets easier."
+    ]
+  },
+  sleep: {
+    icon: "Sleep",
+    label: "Night Lock-In",
+    reward: "Recovery XP",
+    descriptions: [
+      "Protect the shutdown ritual so tomorrow starts cleaner.",
+      "This is where discipline becomes energy for the next day.",
+      "A stronger night routine makes every future quest easier."
+    ]
+  },
+  screen: {
+    icon: "Discipline",
+    label: "Dopamine Guard",
+    reward: "Discipline XP",
+    descriptions: [
+      "Hold the line against easy scrolling and keep your attention expensive.",
+      "Choose deliberate entertainment, not accidental drift.",
+      "Every time you reduce noise, your real priorities get louder."
+    ]
+  },
+  shower: {
+    icon: "Edge",
+    label: "Discomfort Trigger",
+    reward: "Edge XP",
+    descriptions: [
+      "A small dose of discomfort sharpens commitment.",
+      "Use this quest as a reminder that resistance is part of the game.",
+      "The goal is not suffering. The goal is obedience to your own standard."
+    ]
+  }
+};
+
 const appState = loadState();
 
 const elements = {
@@ -63,6 +136,10 @@ const elements = {
   resetData: document.querySelector("#resetData"),
   resetStatus: document.querySelector("#resetStatus"),
   weeklyBreakdown: document.querySelector("#weeklyBreakdown"),
+  timelineBadge: document.querySelector("#timelineBadge"),
+  timelineSpotlightTitle: document.querySelector("#timelineSpotlightTitle"),
+  timelineSpotlightText: document.querySelector("#timelineSpotlightText"),
+  timelineGrid: document.querySelector("#timelineGrid"),
   programSummary: document.querySelector("#programSummary"),
   questList: document.querySelector("#questList"),
   chartBars: document.querySelector("#chartBars"),
@@ -71,6 +148,8 @@ const elements = {
   firstRunGuide: document.querySelector("#firstRunGuide"),
   todayStateBadge: document.querySelector("#todayStateBadge"),
   todayStateText: document.querySelector("#todayStateText"),
+  questBriefTitle: document.querySelector("#questBriefTitle"),
+  questBriefText: document.querySelector("#questBriefText"),
   saveStatusHeadline: document.querySelector("#saveStatusHeadline"),
   saveStatusText: document.querySelector("#saveStatusText"),
   storageMode: document.querySelector("#storageMode"),
@@ -273,49 +352,30 @@ function createQuestSet(profile, day, difficulty) {
   const coldExposure = day > 14 ? `${30 + difficulty * 15} sec cool finish` : "Optional cool finish";
 
   return [
-    {
-      id: `${day}-move`,
-      label: `Train or move for ${workoutMinutes} minutes`,
-      xp: 20 + difficulty * 3,
-      note: "Body"
-    },
-    {
-      id: `${day}-focus`,
-      label: `Do a focused work block for ${focusMinutes} minutes`,
-      xp: 18 + difficulty * 3,
-      note: "Career or study"
-    },
-    {
-      id: `${day}-learn`,
-      label: `Read or learn for ${readingMinutes} minutes`,
-      xp: 12 + difficulty * 2,
-      note: "Mind"
-    },
-    {
-      id: `${day}-water`,
-      label: `Drink ${waterTarget.toFixed(1)}L of water`,
-      xp: 10 + difficulty,
-      note: "Recovery"
-    },
-    {
-      id: `${day}-sleep`,
-      label: sleepTarget,
-      xp: 12 + difficulty,
-      note: "Sleep"
-    },
-    {
-      id: `${day}-screen`,
-      label: `Keep entertainment screen time under ${screenLimit.toFixed(1)} hours`,
-      xp: 16 + difficulty * 2,
-      note: "Discipline"
-    },
-    {
-      id: `${day}-shower`,
-      label: `End your shower with ${coldExposure}`,
-      xp: 8 + difficulty,
-      note: "Edge"
-    }
+    buildQuest(day, "move", `Train or move for ${workoutMinutes} minutes`, 20 + difficulty * 3, difficulty),
+    buildQuest(day, "focus", `Do a focused work block for ${focusMinutes} minutes`, 18 + difficulty * 3, difficulty),
+    buildQuest(day, "learn", `Read or learn for ${readingMinutes} minutes`, 12 + difficulty * 2, difficulty),
+    buildQuest(day, "water", `Drink ${waterTarget.toFixed(1)}L of water`, 10 + difficulty, difficulty),
+    buildQuest(day, "sleep", sleepTarget, 12 + difficulty, difficulty),
+    buildQuest(day, "screen", `Keep entertainment screen time under ${screenLimit.toFixed(1)} hours`, 16 + difficulty * 2, difficulty),
+    buildQuest(day, "shower", `End your shower with ${coldExposure}`, 8 + difficulty, difficulty)
   ];
+}
+
+function buildQuest(day, type, objective, xp, difficulty) {
+  const archetype = QUEST_ARCHETYPES[type];
+  const descriptionIndex = (day + difficulty) % archetype.descriptions.length;
+  return {
+    id: `${day}-${type}`,
+    type,
+    label: archetype.label,
+    objective,
+    xp,
+    note: archetype.icon,
+    reward: archetype.reward,
+    description: archetype.descriptions[descriptionIndex],
+    tier: difficulty <= 2 ? "Standard" : difficulty <= 4 ? "Elite" : "Boss"
+  };
 }
 
 function getCurrentProgramDay() {
@@ -402,6 +462,7 @@ function recalculateStats() {
 function render() {
   renderSummary();
   renderWeeklyBreakdown();
+  renderTimeline();
   renderQuestList();
   renderMetrics();
   renderChart();
@@ -496,15 +557,23 @@ function renderQuestList() {
   elements.todayStateBadge.textContent = dayState.label;
   elements.todayStateBadge.className = `mini-badge ${dayState.className}`;
   elements.todayStateText.textContent = dayState.description;
+  elements.questBriefTitle.textContent = `Day ${currentDay} mission briefing`;
+  elements.questBriefText.textContent = buildQuestBrief(dayPlan, dayState);
   elements.questList.innerHTML = dayPlan.quests
-    .map((quest) => {
+    .map((quest, index) => {
       const checked = completedQuestIds.includes(quest.id);
       return `
-        <article class="quest-card ${checked ? "completed" : ""}">
+        <article class="quest-card ${checked ? "completed" : ""}" style="animation-delay:${index * 70}ms">
           <div class="quest-header">
             <div>
-              <span class="quest-title">${escapeHtml(quest.label)}</span>
-              <div class="quest-meta">${escapeHtml(quest.note)} | ${quest.xp} XP</div>
+              <div class="quest-flair">
+                <span class="quest-pill">${escapeHtml(quest.note)}</span>
+                <span class="quest-pill">${escapeHtml(quest.tier)}</span>
+                <span class="quest-pill reward">${escapeHtml(quest.reward)}</span>
+              </div>
+              <span class="quest-title">${escapeHtml(quest.label)}: ${escapeHtml(quest.objective)}</span>
+              <p class="quest-copy">${escapeHtml(quest.description)}</p>
+              <div class="quest-meta">${quest.xp} XP | Daily mission</div>
             </div>
             <label>
               <span class="visually-hidden">Complete quest</span>
@@ -521,6 +590,52 @@ function renderQuestList() {
       handleQuestToggle(Number(checkbox.dataset.day), checkbox.dataset.questId);
     });
   });
+}
+
+function renderTimeline() {
+  if (!appState.plan.length) {
+    elements.timelineBadge.textContent = "No active run";
+    elements.timelineSpotlightTitle.textContent = "Start your campaign";
+    elements.timelineSpotlightText.textContent =
+      "Generate a plan to turn the 66 days into a visible progression map.";
+    elements.timelineGrid.textContent = "Generate a plan to unlock the full 66-day timeline.";
+    return;
+  }
+
+  const currentDay = getCurrentProgramDay();
+  const currentWeek = getCurrentWeek();
+  elements.timelineBadge.textContent = `Week ${currentWeek} live`;
+  const spotlightState = getDayState(currentDay);
+  elements.timelineSpotlightTitle.textContent = `Day ${currentDay}: ${spotlightState.label}`;
+  elements.timelineSpotlightText.textContent =
+    `${spotlightState.description} Current arc: ${appState.plan[currentDay - 1]?.title || "Reset"}.`;
+
+  elements.timelineGrid.innerHTML = appState.plan
+    .map((dayPlan) => {
+      const dayState = getDayState(dayPlan.day);
+      return `
+        <article class="timeline-node ${dayState.className}" title="${escapeHtml(dayState.description)}">
+          <strong>Day ${dayPlan.day}</strong>
+          <span>${escapeHtml(dayPlan.title)}</span>
+          <span>${escapeHtml(dayState.label)}</span>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function buildQuestBrief(dayPlan, dayState) {
+  if (!dayPlan) {
+    return "Generate a plan to unlock a proper mission brief.";
+  }
+
+  const opening =
+    dayState.label === "Completed"
+      ? "You already cleared today’s board."
+      : dayState.label === "Missed"
+        ? "The schedule moved, but you can still regain control."
+        : "Today’s board is live.";
+  return `${opening} The theme for Day ${dayPlan.day} is ${dayPlan.title}. Prioritize your Focus and Body quests first, then close the day with Recovery and Discipline wins.`;
 }
 
 function renderMetrics() {

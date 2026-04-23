@@ -57,6 +57,8 @@
     <main class="main-panel">
       <section class="tab-panel active" data-panel="dashboard">
         <header class="hero">
+          <div class="hero-orb hero-orb-one"></div>
+          <div class="hero-orb hero-orb-two"></div>
           <div>
             <p class="eyebrow">Reset your life in 66 days</p>
             <h2>Daily momentum, weekly progression, and local ownership.</h2>
@@ -70,6 +72,40 @@
             <button class="secondary-button" id="loadDemo">Load demo</button>
           </div>
         </header>
+
+        <section class="landing-grid">
+          <article class="surface-card landing-card">
+            <p class="eyebrow">For your friend</p>
+            <h3>Open the site. Build the plan. Play the day.</h3>
+            <p class="muted-copy">
+              Life Reset Personal now behaves like a small self-mastery game: each day has a real
+              calendar slot, themed quests, XP, a streak, and a checkpoint message that feels like
+              a mission brief instead of a to-do list.
+            </p>
+            <div class="button-row">
+              <button class="primary-button" data-tab-jump="journey">Start the 66-day run</button>
+              <button class="secondary-button" data-tab-jump="settings">How it works</button>
+            </div>
+          </article>
+
+          <article class="surface-card landing-card compact">
+            <p class="eyebrow">Experience</p>
+            <div class="feature-stack">
+              <div class="feature-line">
+                <strong>Quest-based days</strong>
+                <span>Body, Focus, Discipline, Recovery</span>
+              </div>
+              <div class="feature-line">
+                <strong>Built for daily use</strong>
+                <span>Calendar tracking, local saves, weekly backup</span>
+              </div>
+              <div class="feature-line">
+                <strong>Friend-friendly</strong>
+                <span>One URL, no install, no account, no subscription</span>
+              </div>
+            </div>
+          </article>
+        </section>
 
         <section class="notice-strip" id="firstRunGuide">
           <strong>How this works daily:</strong>
@@ -112,6 +148,10 @@
             <div class="inline-status-row">
               <span class="mini-badge" id="todayStateBadge">Waiting for plan</span>
               <span class="muted-copy" id="todayStateText">Create a plan to start day-based tracking.</span>
+            </div>
+            <div class="quest-brief">
+              <strong id="questBriefTitle">Daily mission briefing</strong>
+              <p id="questBriefText" class="muted-copy">Your quests will feel more alive once a plan is generated.</p>
             </div>
             <div id="questList" class="stack empty-state">
               Your daily quests will appear here after you create a plan.
@@ -266,6 +306,25 @@
               </div>
             </div>
             <div id="weeklyBreakdown" class="stack"></div>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Campaign map</p>
+                <h3>66-day timeline</h3>
+              </div>
+              <div class="badge" id="timelineBadge">No active run</div>
+            </div>
+            <div class="timeline-spotlight">
+              <strong id="timelineSpotlightTitle">Start your campaign</strong>
+              <p id="timelineSpotlightText" class="muted-copy">
+                Generate a plan to turn the 66 days into a visible progression map.
+              </p>
+            </div>
+            <div id="timelineGrid" class="timeline-grid empty-state">
+              Generate a plan to unlock the full 66-day timeline.
+            </div>
           </article>
         </section>
 

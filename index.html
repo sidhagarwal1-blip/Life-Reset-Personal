@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Reset Personal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <p class="brand-mark">LR</p>
+        <div>
+          <h1>Life Reset Personal</h1>
+          <p>66-day rebuild system</p>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-pill active" data-tab="dashboard">Dashboard</button>
+        <button class="nav-pill" data-tab="journey">Journey</button>
+        <button class="nav-pill" data-tab="tools">Tools</button>
+        <button class="nav-pill" data-tab="settings">Settings</button>
+      </nav>
+
+      <section class="sidebar-card">
+        <p class="eyebrow">Current arc</p>
+        <h2 id="sidebarGoal">Start your reset</h2>
+        <p id="sidebarStatus">Build your plan to unlock daily quests, streaks, and charts.</p>
+        <div class="progress-track">
+          <div id="sidebarProgress"></div>
+        </div>
+        <div class="sidebar-stats">
+          <div>
+            <span>Day</span>
+            <strong id="heroDay">0 / 66</strong>
+          </div>
+          <div>
+            <span>Streak</span>
+            <strong id="heroStreak">0</strong>
+          </div>
+          <div>
+            <span>XP</span>
+            <strong id="heroXp">0</strong>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main-panel">
+      <section class="tab-panel active" data-panel="dashboard">
+        <header class="hero">
+          <div>
+            <p class="eyebrow">Reset your life in 66 days</p>
+            <h2>Daily momentum, weekly progression, and local ownership.</h2>
+            <p class="hero-copy">
+              This version keeps the best parts of the product idea for personal use:
+              adaptive quests, streaks, journaling, tools, reminders, and exports. No subscription.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button class="primary-button" data-tab-jump="journey">Build my plan</button>
+            <button class="secondary-button" id="loadDemo">Load demo</button>
+          </div>
+        </header>
+
+        <section class="notice-strip" id="firstRunGuide">
+          <strong>How this works daily:</strong>
+          This app saves on this browser and this laptop. Open the same browser each day, complete the due
+          quests, and export a JSON backup weekly if you want protection when changing devices.
+        </section>
+
+        <section class="metric-grid">
+          <article class="metric-card">
+            <span>Completed days</span>
+            <strong id="completedDays">0</strong>
+            <p>Full quest sets closed.</p>
+          </article>
+          <article class="metric-card">
+            <span>Longest streak</span>
+            <strong id="longestStreak">0</strong>
+            <p>Proof that your floor is rising.</p>
+          </article>
+          <article class="metric-card">
+            <span>Journal entries</span>
+            <strong id="entryCount">0</strong>
+            <p>Documented reflections.</p>
+          </article>
+          <article class="metric-card highlight">
+            <span>Reminder</span>
+            <strong id="reminderPreview">9:00 PM</strong>
+            <p id="reminderPreviewText">Local browser reminder is off.</p>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Today</p>
+                <h3>Daily quests</h3>
+              </div>
+              <div class="badge" id="currentWeekBadge">Week 0</div>
+            </div>
+            <div class="inline-status-row">
+              <span class="mini-badge" id="todayStateBadge">Waiting for plan</span>
+              <span class="muted-copy" id="todayStateText">Create a plan to start day-based tracking.</span>
+            </div>
+            <div id="questList" class="stack empty-state">
+              Your daily quests will appear here after you create a plan.
+            </div>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Trends</p>
+                <h3>Consistency chart</h3>
+              </div>
+              <div class="badge">Last 14 days</div>
+            </div>
+            <div id="chartBars" class="chart-bars"></div>
+            <div class="chart-legend">
+              <span>Quest completion by day</span>
+              <strong id="chartSummary">No data yet.</strong>
+            </div>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Program</p>
+                <h3>Current program summary</h3>
+              </div>
+            </div>
+            <div id="programSummary" class="program-summary empty-state">
+              Create a plan to see your 66-day structure and progression.
+            </div>
+            <p id="scheduleStatus" class="muted-copy">
+              Daily scheduling info will appear here after you create a plan.
+            </p>
+            <div class="checkpoint-card">
+              <h4>Checkpoint</h4>
+              <p id="checkpointMessage">
+                Start your program and come back here after your first completed day.
+              </p>
+            </div>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Export</p>
+                <h3>Own your data</h3>
+              </div>
+            </div>
+            <div class="stack">
+              <p class="muted-copy">
+                Export your plan, streaks, journal, and settings as JSON. Import it later on the
+                same browser or another machine.
+              </p>
+              <div class="backup-callout">
+                <strong>Backup habit:</strong>
+                export once a week or before moving to another browser or laptop.
+              </div>
+              <div class="button-row">
+                <button class="secondary-button" id="exportData">Export JSON</button>
+                <label class="secondary-button file-button">
+                  Import JSON
+                  <input type="file" id="importData" accept="application/json" />
+                </label>
+              </div>
+              <p class="muted-copy" id="importStatus">No import yet.</p>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-panel="journey">
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Onboarding</p>
+                <h3>Generate your custom reset</h3>
+              </div>
+            </div>
+            <form id="onboardingForm" class="form-grid">
+              <label>
+                Your name
+                <input type="text" name="name" placeholder="Sid" />
+              </label>
+              <label>
+                Main goal
+                <input
+                  type="text"
+                  name="goal"
+                  placeholder="Get leaner, focused, and more disciplined"
+                  required
+                />
+              </label>
+              <label>
+                Biggest challenge
+                <select name="challenge">
+                  <option value="focus">Lack of focus</option>
+                  <option value="energy">Low energy</option>
+                  <option value="consistency">Poor consistency</option>
+                  <option value="screen">Too much screen time</option>
+                  <option value="discipline">Weak discipline</option>
+                </select>
+              </label>
+              <label>
+                Fitness baseline
+                <select name="fitness">
+                  <option value="low">I barely train</option>
+                  <option value="medium">I train sometimes</option>
+                  <option value="high">I train often</option>
+                </select>
+              </label>
+              <label>
+                Sleep quality
+                <select name="sleep">
+                  <option value="poor">Messy</option>
+                  <option value="okay">Average</option>
+                  <option value="good">Solid</option>
+                </select>
+              </label>
+              <label>
+                Water habit
+                <select name="water">
+                  <option value="low">Usually too low</option>
+                  <option value="okay">Decent</option>
+                  <option value="good">Already solid</option>
+                </select>
+              </label>
+              <label>
+                Reading habit
+                <select name="learning">
+                  <option value="none">Almost none</option>
+                  <option value="some">Somewhat consistent</option>
+                  <option value="strong">Already strong</option>
+                </select>
+              </label>
+              <label>
+                Daily screen limit target (hours)
+                <input type="number" name="screenTarget" min="1" max="12" value="3" required />
+              </label>
+              <button class="primary-button" type="submit">Build my 66-day plan</button>
+            </form>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Weekly arc</p>
+                <h3>Your progression</h3>
+              </div>
+            </div>
+            <div id="weeklyBreakdown" class="stack"></div>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Journal</p>
+                <h3>Document the journey</h3>
+              </div>
+            </div>
+            <form id="journalForm" class="stack">
+              <label>
+                Mood
+                <select name="mood">
+                  <option value="Locked in">Locked in</option>
+                  <option value="Calm">Calm</option>
+                  <option value="Tired">Tired</option>
+                  <option value="Restless">Restless</option>
+                  <option value="Proud">Proud</option>
+                </select>
+              </label>
+              <label>
+                Reflection
+                <textarea
+                  name="reflection"
+                  rows="5"
+                  placeholder="What worked today? What slipped? What gets tightened tomorrow?"
+                  required
+                ></textarea>
+              </label>
+              <button class="primary-button" type="submit">Save entry</button>
+            </form>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">History</p>
+                <h3>Latest entries</h3>
+              </div>
+            </div>
+            <div id="journalEntries" class="stack empty-state">No entries yet.</div>
+          </article>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-panel="tools">
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Focus</p>
+                <h3>Pomodoro</h3>
+              </div>
+            </div>
+            <div class="tool-hero">
+              <strong id="pomodoroTime">25:00</strong>
+              <div class="button-row">
+                <button class="primary-button" id="pomodoroToggle">Start</button>
+                <button class="secondary-button" id="pomodoroReset">Reset</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Body</p>
+                <h3>Workout counter</h3>
+              </div>
+            </div>
+            <div class="tool-hero small">
+              <strong id="workoutCount">0</strong>
+              <div class="button-row">
+                <button class="secondary-button" id="workoutMinus">-</button>
+                <button class="secondary-button" id="workoutPlus">+</button>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Calm</p>
+                <h3>Guided breathing</h3>
+              </div>
+            </div>
+            <p class="muted-copy">
+              Uses browser speech synthesis for a short reset. This stays local and requires no API.
+            </p>
+            <div class="button-row">
+              <button class="secondary-button" id="playMeditation">Play</button>
+              <button class="secondary-button" id="stopMeditation">Stop</button>
+            </div>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Discipline</p>
+                <h3>Focus wall</h3>
+              </div>
+            </div>
+            <label>
+              Tempting site or habit
+              <input type="text" id="temptationInput" placeholder="Instagram / YouTube / endless scrolling" />
+            </label>
+            <div class="button-row">
+              <button class="primary-button" id="focusWallTrigger">Interrupt impulse</button>
+            </div>
+            <p id="focusWallMessage" class="muted-copy"></p>
+          </article>
+        </section>
+
+        <section class="surface-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Learning</p>
+              <h3>Book summary cards</h3>
+            </div>
+          </div>
+          <div id="bookSummaryCards" class="summary-grid"></div>
+        </section>
+      </section>
+
+      <section class="tab-panel" data-panel="settings">
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Storage</p>
+                <h3>Your data on this device</h3>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="storage-card">
+                <div>
+                  <strong id="saveStatusHeadline">Saved automatically</strong>
+                  <p class="muted-copy" id="saveStatusText">
+                    This app stores progress in this browser unless you export it.
+                  </p>
+                </div>
+                <div class="storage-meta">
+                  <span id="storageMode">Storage mode unknown</span>
+                  <span id="saveTimestamp">No save yet</span>
+                </div>
+              </div>
+              <div class="backup-callout">
+                <strong>Good habit:</strong>
+                use the same browser every day and export a backup weekly.
+              </div>
+            </div>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Reminders</p>
+                <h3>Local browser reminder</h3>
+              </div>
+            </div>
+            <form id="reminderForm" class="stack">
+              <label class="toggle-row">
+                <span>Enable browser reminder</span>
+                <input type="checkbox" name="enabled" id="reminderEnabled" />
+              </label>
+              <label>
+                Reminder time
+                <input type="time" name="time" id="reminderTime" value="21:00" />
+              </label>
+              <label>
+                Reminder message
+                <input type="text" name="message" id="reminderMessage" value="Finish your quests before the day closes." />
+              </label>
+              <div class="button-row">
+                <button class="primary-button" type="submit">Save reminder</button>
+                <button class="secondary-button" type="button" id="testReminder">Test now</button>
+              </div>
+            </form>
+            <p class="muted-copy">
+              This HTML version can only show reminders while the page is open. The mobile app scaffold
+              includes the structure for a proper notification flow.
+            </p>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Help</p>
+                <h3>How to use this daily</h3>
+              </div>
+            </div>
+            <ol class="info-list ordered">
+              <li>Open the same browser each day on the same laptop.</li>
+              <li>Check the card marked <strong>Due today</strong> and finish those quests.</li>
+              <li>Write a quick journal entry after the day or workout block.</li>
+              <li>Export JSON weekly or before changing device or browser.</li>
+            </ol>
+          </article>
+
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">About this build</p>
+                <h3>What is intentionally different</h3>
+              </div>
+            </div>
+            <ul class="info-list">
+              <li>No paid backend or subscription wall.</li>
+              <li>No native device-level app blocking in the HTML version.</li>
+              <li>Everything is local-first and exportable.</li>
+              <li>The visual language is inspired by the product, not a pixel-perfect copy.</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="surface-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Reset</p>
+                <h3>Start fresh on this browser</h3>
+              </div>
+            </div>
+            <p class="muted-copy">
+              This removes the current profile, progress, journal, reminder settings, and quest history from this browser only.
+            </p>
+            <div class="button-row">
+              <button class="secondary-button danger-button" id="resetData">Reset all local data</button>
+            </div>
+            <p class="muted-copy" id="resetStatus">No reset performed.</p>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

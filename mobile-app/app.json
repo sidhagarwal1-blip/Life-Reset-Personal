@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Life Reset Personal",
+    "slug": "life-reset-personal",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.personal.lifereset"
+    },
+    "plugins": [
+      "expo-notifications"
+    ]
+  }
+}
